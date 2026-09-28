@@ -1,4 +1,4 @@
-The full implementation of Text-Guided Multi-Instance Learning for Scoliosis Screening via Gait Video Analysis will be released as open-source after publication.
+The full implementation of Uncertainty-Aware Multimodal Gait Representation Learning for Scoliosis Screening (UMGRL) will be released as open-source after publication.
 
 ## Implementation details
 
