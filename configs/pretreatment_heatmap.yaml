@@ -1,0 +1,25 @@
+coco18tococo17_args:
+  transfer_to_coco17: False
+
+padkeypoints_args:
+  pad_method: knn
+  use_conf: True
+
+norm_args:
+  pose_format: coco
+  use_conf: ${padkeypoints_args.use_conf}
+  heatmap_image_height: 128
+
+heatmap_generator_args:
+  sigma: 8.0
+  use_score: ${padkeypoints_args.use_conf}
+  img_h: ${norm_args.heatmap_image_height}
+  img_w: ${norm_args.heatmap_image_height}
+  with_limb: null
+  with_kp: null
+
+align_args:
+  align: True
+  final_img_size: 64
+  offset: 0
+  heatmap_image_size: ${norm_args.heatmap_image_height}
