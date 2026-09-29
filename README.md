@@ -15,7 +15,6 @@ This repository contains:
 configs/
   stage1/          encoder configs used to extract Stage 1 input features
   drf/             DRF configs for the 1:1:2, 1:1:4, 1:1:8, and 1:1:16 splits
-datasets/          preprocessing scripts and dataset partitions
 opengait/          training framework (based on OpenGait)
   modeling/models/unified_encoder.py   Stage 1 model
   modeling/losses/geo_alignment.py     Stage 1 losses
@@ -32,20 +31,19 @@ Tested with Python 3.9, PyTorch 2.4, and CUDA 12.1.
 pip install -r requirements.txt
 ```
 
-`open3d` is only needed to preprocess SUSTech1K point clouds.
-
 ## Data preparation
 
-Obtain SUSTech1K, CCPG, and Scoliosis1K from their official sources, then convert them to the pickle format used by the framework.
+Obtain SUSTech1K, CCPG, and Scoliosis1K from their official sources and convert them to the OpenGait pickle format: silhouettes, 2D pose heatmaps, and, for SUSTech1K, LiDAR point clouds.
 
-```bash
-python datasets/pretreatment.py -i <raw_silhouettes> -o <silhouette_pkl> -d <dataset>
-python datasets/SUSTech1K/pretreatment_SUSTech1K.py -i <raw_sustech1k> -o <sustech1k_pkl>
-python -m torch.distributed.run --nproc_per_node=1 datasets/pretreatment_heatmap.py \
-    --pose_data_path <pose_pkl> --save_root <heatmap_root> --dataset_name <dataset>
-```
+In each config under `configs/`, set `dataset_root` to the converted data. `dataset_partition` points to the train/test partition file of each dataset:
 
-Set `dataset_root` in each config under `configs/` to the corresponding output directory. All commands below are run from the repository root.
+| Dataset | Partition file |
+|---|---|
+| SUSTech1K | `datasets/SUSTech1K/SUSTech1K.json` |
+| CCPG | `datasets/CCPG/CCPG.json` |
+| Scoliosis1K | `datasets/Scoliosis1K/Scoliosis1K_<ratio>.json`, with `<ratio>` in `112`, `114`, `118`, `1116` |
+
+All commands below are run from the repository root.
 
 ## Stage 1: modality-robust pretraining
 
@@ -93,17 +91,7 @@ The trained model exposes `get_final_representation(z_seg, z_pose, z_cloud)`, wh
 
 ## DRF reproduction
 
-DRF takes two inputs derived from 2D pose: a skeleton heatmap and PAV, a per-sequence descriptor of left–right keypoint asymmetry. Build them from the Scoliosis1K pose keypoints and heatmaps:
-
-```bash
-python datasets/Scoliosis1K/pretreatment_drf.py \
-    --pose_root <scoliosis1k_pose_json> \
-    --heatmap_root <scoliosis1k_heatmap_root> \
-    --partition datasets/Scoliosis1K/Scoliosis1K_<ratio>.json \
-    --output_root <Scoliosis1K-DRF-pkl>
-```
-
-PAV values are min–max normalized with statistics from the training identities of the given partition.
+DRF takes two inputs derived from 2D pose: a skeleton heatmap and PAV, a per-sequence descriptor of left–right keypoint asymmetry. Each Scoliosis1K sequence directory under `dataset_root` holds `0_heatmap.pkl` with the heatmaps and `1_pav.pkl` with the PAV repeated for every frame.
 
 Train and evaluate on each class-imbalance split (`112`, `114`, `118`, `1116`):
 
