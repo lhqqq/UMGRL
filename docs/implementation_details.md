@@ -25,6 +25,8 @@ Stage 1 is pretrained on SUSTech1K and CCPG with varying modality availability.
 | Modality dropout: keep all modalities | 0.2 |
 | Modality dropout: drop one modality | 0.7 |
 | Modality dropout: drop two modalities | 0.1 |
+| Modality dropout for two-modality samples (CCPG): keep both / drop one | 0.3 / 0.7 |
+| LidarGait++ part tokens | 31, linearly resampled to 16 |
 
 ### Optimization
 
@@ -33,8 +35,10 @@ Stage 1 is pretrained on SUSTech1K and CCPG with varying modality availability.
 | Optimizer | Adam |
 | Learning rate | 1e-4 |
 | Weight decay | 1e-5 |
+| Batch size | 64 |
 | Iterations | 50k |
-| LR scheduler | MultiStepLR, milestones at 20k / 30k / 40k |
+| LR scheduler | MultiStepLR, milestones at 20k / 30k / 40k, decay factor 0.1 |
+| Precision | Mixed precision (AMP) |
 
 ### Cross-modal imputer
 

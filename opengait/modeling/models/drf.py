@@ -124,10 +124,3 @@ class DRF(BaseModel):
                 'embeddings': logits,
             }
         }
-
-
-class ScoNetMTske(DRF):
-    def build_network(self, model_cfg):
-        model_cfg = dict(model_cfg)
-        model_cfg['use_pga'] = False
-        super().build_network(model_cfg)

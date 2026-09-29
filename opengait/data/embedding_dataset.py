@@ -122,46 +122,6 @@ class EmbeddingDataset(Dataset):
         }
 
 
-def collate_fn(batch):
-    seg_emb = torch.stack([item['seg_emb'] for item in batch])
-    pose_emb = torch.stack([item['pose_emb'] for item in batch])
-    pid = torch.tensor([item['pid'] for item in batch], dtype=torch.long)
-
-    if batch[0]['cloud_emb'] is not None:
-        cloud_emb = torch.stack([item['cloud_emb'] for item in batch])
-    else:
-        cloud_emb = None
-
-    return {
-        'seg_emb': seg_emb,
-        'pose_emb': pose_emb,
-        'cloud_emb': cloud_emb,
-        'pid': pid,
-    }
-
-
-def get_dataloader(seg_root, pose_root, cloud_root=None, batch_size=32,
-                   shuffle=True, num_workers=4, person_ids=None, drop_last=True):
-    dataset = EmbeddingDataset(
-        seg_root=seg_root,
-        pose_root=pose_root,
-        cloud_root=cloud_root,
-        person_ids=person_ids,
-    )
-
-    loader = DataLoader(
-        dataset,
-        batch_size=batch_size,
-        shuffle=shuffle,
-        num_workers=num_workers,
-        collate_fn=collate_fn,
-        drop_last=drop_last,
-        pin_memory=True,
-    )
-
-    return loader, dataset
-
-
 class MixedEmbeddingDataset(Dataset):
     def __init__(self, datasets_config):
         self.samples = []
