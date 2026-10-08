@@ -113,6 +113,19 @@ This repository builds upon the [OpenGait](https://github.com/ShiqiYu/OpenGait) 
 If you use this repository, please consider citing the following related works:
 
 ```bibtex
+@ARTICLE{11721224,
+  author={Li, Haiqing and Wu, Yinhao and Yan, Jingquan and Guo, Yuzhi and Ma, Hehuan and Zhong, Wenliang and Gao, Jean and Huang, Junzhou},
+  journal={IEEE Transactions on Medical Imaging}, 
+  title={Uncertainty-Aware Multimodal Gait Representation Learning for Scoliosis Screening}, 
+  year={2026},
+  volume={},
+  number={},
+  pages={1-1},
+  keywords={Modeling;Uncertainty;Scoliosis;Accuracy;Biomedical imaging;Labeling;Conferences;Sensitivity;Computers;Estimation;Scoliosis screening;Gait analysis;Evidential deep learning;Multimodality},
+  doi={10.1109/TMI.2026.3740843}}
+
+
+
 @inproceedings{fan2023opengait,
   title={OpenGait: Revisiting Gait Recognition Towards Better Practicality},
   author={Fan, Chao and Liang, Junhao and Shen, Chuanfu and Hou, Saihui and Huang, Yongzhen and Yu, Shiqi},
